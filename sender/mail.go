@@ -43,21 +43,33 @@ func SendMail(mail *g.Mail) {
 
         if g.Config.Smtp.TLS {
                 s := smtp.NewSMTP(g.Config.Smtp.Addr, g.Config.Smtp.Username, g.Config.Smtp.Password, g.Config.Smtp.TLS, g.Config.Smtp.Anonymous, g.Config.Smtp.SkipVerify)
+                err := s.SendMail(g.Config.Smtp.From, strings.Replace(mail.Tos, ",", ";", -1), mail.Subject, mail.Content, "text")
+                if err != nil {
+                        log.Println(err, "tos:", mail.Tos)
+                        //SendSmsToMaintainer("sender:" + err.Error())
+                }
+                if g.Config.Debug {
+                        resp := "ok"
+                        if err != nil {
+                                resp = err.Error()
+                        }
+                        log.Println("==mail==>>>>", mail)
+                        log.Println("<<<<==mail==", resp)
+                }
         } else {
                 s := smtp.New(g.Config.Smtp.Addr, g.Config.Smtp.Username, g.Config.Smtp.Password)
+                err := s.SendMail(g.Config.Smtp.From, strings.Replace(mail.Tos, ",", ";", -1), mail.Subject, mail.Content, "text")
+                if err != nil {
+                        log.Println(err, "tos:", mail.Tos)
+                        //SendSmsToMaintainer("sender:" + err.Error())
+                }
+                if g.Config.Debug {
+                        resp := "ok"
+                        if err != nil {
+                                resp = err.Error()
+                        }
+                        log.Println("==mail==>>>>", mail)
+                        log.Println("<<<<==mail==", resp)
+                }
         }
-	err := s.SendMail(g.Config.Smtp.From, strings.Replace(mail.Tos, ",", ";", -1), mail.Subject, mail.Content, "text")
-	if err != nil {
-		log.Println(err, "tos:", mail.Tos)
-		//SendSmsToMaintainer("sender:" + err.Error())
-	}
-
-	if g.Config.Debug {
-		resp := "ok"
-		if err != nil {
-			resp = err.Error()
-		}
-		log.Println("==mail==>>>>", mail)
-		log.Println("<<<<==mail==", resp)
-	}
 }
