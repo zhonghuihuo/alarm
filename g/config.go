@@ -64,10 +64,13 @@ type WorkerConfig struct {
 }
 
 type SmtpConfig struct {
-	Addr     string `json:"addr"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	From     string `json:"from"`
+        Addr       string `json:"addr"`
+        Username   string `json:"username"`
+        Password   string `json:"password"`
+        From       string `json:"from"`
+        TLS        bool  `json:"tls"`
+        Anonymous  bool  `json:"anonymous"`
+        SkipVerify bool  `json:"skipverify"`
 }
 
 var (
