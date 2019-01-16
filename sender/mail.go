@@ -41,7 +41,11 @@ func SendMail(mail *g.Mail) {
 		<-MailWorkerChan
 	}()
 
-	s := smtp.New(g.Config.Smtp.Addr, g.Config.Smtp.Username, g.Config.Smtp.Password)
+        if g.Config.Smtp.TLS {
+                s := smtp.NewSMTP(g.Config.Smtp.Addr, g.Config.Smtp.Username, g.Config.Smtp.Password, g.Config.Smtp.TLS, g.Config.Smtp.Anonymous, g.Config.Smtp.SkipVerify)
+        } else {
+                s := smtp.New(g.Config.Smtp.Addr, g.Config.Smtp.Username, g.Config.Smtp.Password)
+        }
 	err := s.SendMail(g.Config.Smtp.From, strings.Replace(mail.Tos, ",", ";", -1), mail.Subject, mail.Content, "text")
 	if err != nil {
 		log.Println(err, "tos:", mail.Tos)
