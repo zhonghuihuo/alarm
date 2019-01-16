@@ -57,7 +57,10 @@ cd alarm
         "addr": "mail.addr:25",
         "username": "mail@mail.com",
         "password": "",
-        "from": "mail@mail.com"
+        "from": "mail@mail.com",
+	"tls": false,
+        "anonymous": false,
+        "skipverify": false
     }
 }
 
